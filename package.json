@@ -1,0 +1,26 @@
+{
+  "name": "mjai-batch-review",
+  "version": "1.0.0",
+  "main": "dist/app.js",
+  "scripts": {
+    "start": "tsc && node dist/app.js",
+    "lint": "eslint . --ext .ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "Review and analyse one's MajSoul logs at one command",
+  "devDependencies": {
+    "@eslint/js": "^9.7.0",
+    "eslint": "^9.7.0",
+    "globals": "^15.8.0",
+    "typescript": "^5.5.3",
+    "typescript-eslint": "^8.0.0-alpha.10"
+  },
+  "dependencies": {
+    "crawlee": "^3.11.0",
+    "playwright": "^1.45.2",
+    "tensoul": "github:Equim-chan/tensoul"
+  }
+}
