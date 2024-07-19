@@ -1,4 +1,4 @@
-import loadUrl from "./urls"
+import loadUrl from "./urls.js";
 
 const accountId = "9304341";
 

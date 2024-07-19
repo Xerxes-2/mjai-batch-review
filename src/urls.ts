@@ -1,9 +1,5 @@
-import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc";
-dayjs.extend(utc);
-
-import { FixedNumberPlayerDataLoader } from "amae-koromo/src/data/source/records/loader";
-import { GameMode } from "amae-koromo/src/data/types";
+import { FixedNumberPlayerDataLoader } from "./amae-koromo/source/loader.js";
+import { GameMode } from "./amae-koromo/types/index.js";
 
 const reviewCompatibleModes = [16, 12, 9] as GameMode[];
 
