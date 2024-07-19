@@ -25,7 +25,7 @@ export const getApiPrefix = () => selectedMirror + Conf.apiSuffix;
 async function fetchWithTimeout(
     url: string,
     opts: Parameters<typeof fetch>[1] = {},
-    timeout = 5000
+    timeout = 5000,
 ): Promise<Response> {
     const abortController = { signal: undefined, abort: () => {} };
     const timeoutToken = setTimeout(function () {
@@ -36,7 +36,7 @@ async function fetchWithTimeout(
         signal: abortController.signal,
     }) as Promise<Response>;
     ret.then(() => clearTimeout(timeoutToken)).catch(() =>
-        clearTimeout(timeoutToken)
+        clearTimeout(timeoutToken),
     );
     return ret;
 }
@@ -46,7 +46,7 @@ let mirrorProbePromise = null as null | Promise<Response>;
 async function fetchData(
     path: string,
     opts: Parameters<typeof fetch>[1] = {},
-    retry = true
+    retry = true,
 ): Promise<Response> {
     try {
         return await fetchWithTimeout(selectedMirror + path, opts);
@@ -57,13 +57,13 @@ async function fetchData(
         }
         if (mirrorProbePromise) {
             console.warn(
-                `Failed to fetch data from mirror ${selectedMirror}, waiting for probe in progress...`
+                `Failed to fetch data from mirror ${selectedMirror}, waiting for probe in progress...`,
             );
             await mirrorProbePromise.then(() => {}).catch(() => {});
             return fetchData(path, opts, false);
         }
         console.warn(
-            `Failed to fetch data from mirror ${selectedMirror}, trying other mirror...`
+            `Failed to fetch data from mirror ${selectedMirror}, trying other mirror...`,
         );
     }
 
@@ -89,10 +89,10 @@ async function fetchData(
                                         return resolve(completedResponse);
                                     }
                                     resolve(e); // Do not reject here, may cause unhandled promise rejection
-                                }, PROBE_TIMEOUT)
-                            )
-                    )
-            )
+                                }, PROBE_TIMEOUT),
+                            ),
+                    ),
+            ),
         ).then((result) => {
             if ("ok" in (result as Response | Error)) {
                 return result;
@@ -120,7 +120,7 @@ export type WithLastModified = {
 
 async function handleResponse<T>(
     cacheKey: string,
-    resp: Response
+    resp: Response,
 ): Promise<T & WithLastModified> {
     if (!resp.ok) {
         const error = new Error("Failed API call");
@@ -151,7 +151,7 @@ async function handleResponse<T>(
                 headers: {
                     "Cache-Control": "max-age=0, no-cache",
                 },
-            }
+            },
         );
         return handleResponse(cacheKey, resultResp);
     }
@@ -159,7 +159,7 @@ async function handleResponse<T>(
     if (lastModified && typeof data === "object") {
         const parsed = dayjs.utc(
             lastModified.slice(lastModified.indexOf(" ") + 1),
-            "DD MMM YYYY HH:mm:ss"
+            "DD MMM YYYY HH:mm:ss",
         );
         if (parsed.isValid()) {
             data = Object.defineProperty(data, "_lastModified", {
@@ -176,7 +176,7 @@ async function handleResponse<T>(
 }
 
 export async function apiGet<T>(
-    path: string
+    path: string,
 ): Promise<T & { _lastModified?: dayjs.ConfigType }> {
     if (path in apiCache) {
         return apiCache[path] as T & WithLastModified;
@@ -187,7 +187,7 @@ export async function apiGet<T>(
 
 export async function apiCacheablePost<T>(
     path: string,
-    body: unknown
+    body: unknown,
 ): Promise<T> {
     const bodyStr = JSON.stringify(body);
     const key = `${path}|${bodyStr}`;

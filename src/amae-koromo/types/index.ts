@@ -3,7 +3,3 @@ export * from "./gameMode.js";
 export * from "./level.js";
 export * from "./metadata.js";
 export * from "./record.js";
-export * from "./ranking.js";
-export * from "./statistics.js";
-export * from "./utils.js";
-export * from "./zone.js";
