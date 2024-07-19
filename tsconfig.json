@@ -1,9 +1,18 @@
 {
-  "compilerOptions": {
-    "module": "NodeNext",
-    "target": "ESNext",
-    "sourceMap": true,
-    "esModuleInterop": true,
-    "outDir": "dist",
-  }
+    "include": ["./src/*"],
+    "compilerOptions": {
+        "allowSyntheticDefaultImports": true,
+        "useUnknownInCatchVariables": false,
+        "moduleResolution": "NodeNext",
+        "target": "ESNext",
+        "strict": true,
+        "allowJs": true,
+        "skipLibCheck": true,
+        "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true,
+        "module": "NodeNext",
+        "isolatedModules": true,
+        "noFallthroughCasesInSwitch": true,
+        "outDir": "./dist"
+    }
 }
