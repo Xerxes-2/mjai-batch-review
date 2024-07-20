@@ -1,4 +1,4 @@
-import loadLogIds from "./urls.js";
+import loadLogIds from "./logIdLoader.js";
 import { Client } from "./tensoul/index.js";
 import { promises as fs } from "fs";
 import config from "./config.js";

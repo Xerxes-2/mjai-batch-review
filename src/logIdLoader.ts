@@ -10,9 +10,11 @@ const loadLogIds = async (id: string, limit = 100) => {
         undefined,
         reviewCompatibleModes,
     );
-    const metadata = loader.getMetadata();
+    // this errors when input is invalid to ensure getNextChunk doesn't hang
+    await loader.getMetadata();
     let records: GameRecord[] = [];
     let chunk: GameRecord[] = [];
+    // but getNextChunk doesn't, it just hangs
     while (records.length < limit && (chunk = await loader.getNextChunk())) {
         records = records.concat(chunk);
     }
