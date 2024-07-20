@@ -2,6 +2,7 @@
     "name": "mjai-batch-review",
     "version": "1.0.0",
     "main": "built/app.js",
+    "type": "module",
     "scripts": {
         "clean": "rm -rf built",
         "build": "npm run clean && tsc",
