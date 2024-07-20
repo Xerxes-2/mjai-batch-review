@@ -64,3 +64,5 @@ package-lock.json
 .eslintcache
 *v8.log
 /lib/
+logs
+src/config.ts

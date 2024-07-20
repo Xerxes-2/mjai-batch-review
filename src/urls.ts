@@ -1,20 +1,25 @@
-import { FixedNumberPlayerDataLoader } from "./amae-koromo/source/loader.js";
+import { PlayerDataLoader } from "./amae-koromo/source/loader.js";
 import { GameMode, GameRecord } from "./amae-koromo/types/index.js";
 
 const reviewCompatibleModes = [16, 12, 9] as GameMode[];
 
-const loadUrl = async (id: string, limit: number = 100) => {
-    const loader = new FixedNumberPlayerDataLoader(
+const loadLogIds = async (id: string, limit = 100) => {
+    const loader = new PlayerDataLoader(
         id,
-        limit,
+        undefined,
+        undefined,
         reviewCompatibleModes,
     );
-    const metadata = await loader.getMetadata();
-    const data = await loader.getNextChunk();
-    console.log(
-        metadata,
-        data.map((x) => GameRecord.getRecordLink(x, id)),
+    let data = await loader.getNextChunk();
+    let records: GameRecord[] = [];
+    while (data && records.length < limit) {
+        records = records.concat(data);
+        data = await loader.getNextChunk();
+    }
+
+    return records.map((record) =>
+        GameRecord.getRecordLink(record, id).split("=").pop(),
     );
 };
 
-export default loadUrl;
+export default loadLogIds;
