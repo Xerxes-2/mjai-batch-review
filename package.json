@@ -27,6 +27,7 @@
     "dependencies": {
         "dayjs": "^1.11.12",
         "mjsoul": "^2.3.0",
+        "open": "^10.1.0",
         "protobufjs": "^7.3.2",
         "proxy-agent": "^6.4.0",
         "superagent": "^9.0.2",
