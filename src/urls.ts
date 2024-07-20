@@ -10,11 +10,11 @@ const loadLogIds = async (id: string, limit = 100) => {
         undefined,
         reviewCompatibleModes,
     );
-    let data = await loader.getNextChunk();
+    const metadata = loader.getMetadata();
     let records: GameRecord[] = [];
-    while (data && records.length < limit) {
-        records = records.concat(data);
-        data = await loader.getNextChunk();
+    let chunk: GameRecord[] = [];
+    while (records.length < limit && (chunk = await loader.getNextChunk())) {
+        records = records.concat(chunk);
     }
 
     return records.map((record) =>
