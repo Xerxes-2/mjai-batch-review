@@ -5,6 +5,7 @@ import config from "./config.js";
 import { exit } from "process";
 import { execFile } from "child_process";
 import util from "util";
+import process from "process";
 
 const execFileAsync = util.promisify(execFile);
 

@@ -4,7 +4,7 @@
         "allowSyntheticDefaultImports": true,
         "useUnknownInCatchVariables": false,
         "moduleResolution": "NodeNext",
-        "target": "es2017",
+        "target": "ESNext",
         "strict": true,
         "allowJs": true,
         "noImplicitAny": false,

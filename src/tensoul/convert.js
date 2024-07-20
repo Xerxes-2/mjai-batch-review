@@ -217,7 +217,8 @@ function parsehule(h, kyoku, isHeadBump) {
                             delta[i] +=
                                 hb +
                                 liablefor * YSCORE[KO][OYA] +
-                                tlround((1 / 2) * liablefor * YSCORE[KO][KO]); //^^same 1st ...
+                                tlround((1 / 2) * liablefor * YSCORE[KO][KO]);
+                        //^^same 1st ...
                         else
                             delta[i] +=
                                 hb +
@@ -532,7 +533,8 @@ function generatelog(mjslog) {
                                 return (
                                     w.includes("p" + deaka(til)) ||
                                     w.includes("p" + makeaka(til))
-                                ); //pon involves same tile type
+                                );
+                            //pon involves same tile type
                             else return false;
                         });
 
