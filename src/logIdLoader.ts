@@ -19,6 +19,9 @@ const loadLogIds = async (id: string, limit = 100) => {
         records = records.concat(chunk);
     }
 
+    // trim to limit
+    records = records.slice(0, limit);
+
     return records.map((record) =>
         GameRecord.getRecordLink(record, id).split("=").pop(),
     );

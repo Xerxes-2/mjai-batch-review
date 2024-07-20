@@ -71,7 +71,7 @@ const main = async () => {
 
     ratings.reverse();
 
-    const html = buildHTML(ratings, accountId, limit);
+    const html = buildHTML(ratings, accountId);
     console.log("Writing ratings.html");
     await fs.rm("./ratings.html", { force: true });
     await fs.writeFile("./ratings.html", html);
@@ -82,19 +82,19 @@ const main = async () => {
     exit(0);
 };
 
-const buildHTML = (ratings: number[], id: string, limit: number) => {
+const buildHTML = (ratings: number[], id: string) => {
     const head = `<head><script src="https://cdn.plot.ly/plotly-2.32.0.min.js" charset="utf-8"></script></head>`;
     const div = `<div id="tester" style="width:600px;height:250px;"></div>`;
     const data: Data[] = [
         {
-            x: ratings.map((_, i) => i),
+            x: Array.from({ length: ratings.length }, (_, i) => i),
             y: ratings.map((rating) => rating * 100),
             mode: "lines",
             type: "scatter",
         },
     ];
     const layout: Partial<Layout> = {
-        title: `Ratings of ${id} (last ${limit} games)`,
+        title: `Ratings of ${id} (last ${ratings.length} games)`,
         xaxis: {
             title: "Game",
             showgrid: false,
