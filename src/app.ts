@@ -21,7 +21,7 @@ const main = async () => {
     const limit = process.argv[3] ? parseInt(process.argv[3]) : 100;
 
     console.log(`Loading log ids for ${accountId}`);
-    const logIds = await loadLogIds(accountId);
+    const logIds = await loadLogIds(accountId, limit);
 
     // clear logs
     console.log("Clearing logs directory");
