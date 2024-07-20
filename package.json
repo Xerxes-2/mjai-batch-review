@@ -12,7 +12,7 @@
     },
     "keywords": [],
     "author": "",
-    "license": "ISC",
+    "license": "MIT",
     "description": "Review and analyse one's MajSoul logs at one command",
     "repository": "github:Xerxes-2/mjai-batch-review",
     "devDependencies": {
