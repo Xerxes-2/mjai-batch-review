@@ -139,9 +139,9 @@ function parsehule(h, kyoku, isHeadBump) {
     if (h.zimo) {
         //ko-oya payment for non-dealer tsumo
         //delta  = [...new Array(kyoku.nplayers)].map(()=> (-hb - h.point_zimo_xian));
-        delta = new Array(kyoku.nplayers).fill(
+        delta = Array.from({ length: kyoku.nplayers }).fill(
             -hb - h.point_zimo_xian - tlround((1 / 2) * h.point_zimo_xian),
-        );
+        ) as number[];
         if (h.seat == kyoku.dealerseat) {
             //oya tsumo
             delta[h.seat] =
@@ -163,7 +163,7 @@ function parsehule(h, kyoku, isHeadBump) {
         }
     } else {
         //ron
-        delta = new Array(kyoku.nplayers).fill(0);
+        delta = Array.from({ length: kyoku.nplayers }).fill(0) as number[];
         delta[h.seat] = rp + (kyoku.nplayers - 1) * hb + h.point_rong;
         delta[kyoku.ldseat] = -(kyoku.nplayers - 1) * hb - h.point_rong;
         points = h.point_rong;
@@ -317,8 +317,8 @@ kyoku.init = function (leaf) {
     this.priichi = false;
     this.nkan = 0; //number of current kans - only for abort workaround
     //pao rule
-    this.nowinds = new Array(4).fill(0); //counter for each players open wind pons/kans
-    this.nodrags = new Array(4).fill(0);
+    this.nowinds = Array.from({ length: 4 }).fill(0); //counter for each players open wind pons/kans
+    this.nodrags = Array.from({ length: 4 }).fill(0);
     this.paowind = -1; //seat of who dealt the final wind, -1 if no one is responsible
     this.paodrag = -1;
 
@@ -605,7 +605,7 @@ function generatelog(mjslog: any[]) {
             case "RecordNoTile": {
                 //ryuukyoku
                 const entry = kyoku.dump([]);
-                const delta = new Array(4).fill(0);
+                const delta = Array.from({ length: 4 }).fill(0);
 
                 //NOTE: mjs wll not give delta_scores if everyone is (no)ten - TODO: minimize the autism
                 if (
@@ -794,7 +794,7 @@ function parse(record: MajSoulLog) {
     res["lobby"] = 0; //tenhou custom lobby - could be tourney id or friendly room for mjs. appending to title instead to avoid 3->C etc. in tenhou.net/5
     // autism to fix logs with AI
     // ranks
-    res["dan"] = new Array(4).fill("");
+    res["dan"] = Array.from({ length: 4 }).fill("");
     record.head.accounts.forEach(
         (e) =>
             (res["dan"][e.seat] =
@@ -805,12 +805,12 @@ function parse(record: MajSoulLog) {
                           .full_name_en),
     );
     // level score, no real analog to rate
-    res["rate"] = new Array(4).fill(0);
+    res["rate"] = Array.from({ length: 4 }).fill(0);
     record.head.accounts.forEach((e) => (res["rate"][e.seat] = e.level.score)); //level score, closest thing to rate
     // sex
-    res["sx"] = new Array(4).fill("C");
+    res["sx"] = Array.from({ length: 4 }).fill("C");
     // >names
-    res["name"] = new Array(4).fill("AI");
+    res["name"] = Array.from({ length: 4 }).fill("AI");
     record.head.accounts.forEach((e) => (res["name"][e.seat] = e.nickname));
     // clean up for sanma AI
     if (3 == nplayers) {
@@ -823,7 +823,7 @@ function parse(record: MajSoulLog) {
         e.part_point_1,
         e.total_point / 1000,
     ]);
-    res["sc"] = new Array(8).fill(0);
+    res["sc"] = Array.from({ length: 8 }).fill(0);
     scores.forEach((e) => {
         res["sc"][2 * e[0]] = e[1];
         res["sc"][2 * e[0] + 1] = e[2];

@@ -176,8 +176,11 @@ class Client {
         } else {
             // for version 210715 or later
             log.data = payload.actions
-                .filter((action) => action.result && action.result.length > 0)
-                .map((action) => {
+                .filter(
+                    (action: { result: string | any[] }) =>
+                        action.result && action.result.length > 0,
+                )
+                .map((action: { result: any }) => {
                     const raw = this._mjsoul.wrapper.decode(action.result);
                     return this._mjsoul.root
                         .lookupType(raw.name)
