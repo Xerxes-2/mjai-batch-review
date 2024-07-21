@@ -54,7 +54,7 @@ const DAISUUSHI = 50;
 const TSUMOGIRI = 60; //tenhou tsumogiri symbol
 
 //global variables - don't touch
-let ALLOW_KIRIAGE = false; //potentially allow this to be true
+const ALLOW_KIRIAGE = false; //potentially allow this to be true
 let TSUMOLOSSOFF = false; //sanma tsumo loss, is set true for sanma when tsumo loss off
 
 //listen for key press, modified from anonymizer mod
@@ -78,7 +78,7 @@ function tm2t(str) {
     //   31-39    - 1-9 sou
     //   41-47    - ESWN WGR
     //   51,52,53 - aka 5 man, pin, sou
-    let num = parseInt(str[0]);
+    const num = parseInt(str[0]);
     const tcon = { m: 1, p: 2, s: 3, z: 4 };
 
     return num ? 10 * tcon[str[1]] + num : 50 + tcon[str[1]];
@@ -109,11 +109,11 @@ function tlround(x) {
 function parsehule(h, kyoku, isHeadBump) {
     //tenhou log viewer requires 点, 飜) or 役満) to end strings, rest of scoring string is entirely optional
     //who won, points from (self if tsumo), who won or if pao: who's responsible
-    let res = [h.seat, h.zimo ? h.seat : kyoku.ldseat, h.seat];
-    let delta = []; //we need to compute the delta ourselves to handle double/triple ron
-    let points = 0;
-    let rp = isHeadBump ? 1000 * (kyoku.nriichi + kyoku.round[2]) : 0; //riichi stick points
-    let hb = isHeadBump ? 100 * kyoku.round[1] : 0; //base honba payment
+    const res = [h.seat, h.zimo ? h.seat : kyoku.ldseat, h.seat];
+    let delta: number[] = []; //we need to compute the delta ourselves to handle double/triple ron
+    let points = "0";
+    const rp = isHeadBump ? 1000 * (kyoku.nriichi + kyoku.round[2]) : 0; //riichi stick points
+    const hb = isHeadBump ? 100 * kyoku.round[1] : 0; //base honba payment
 
     //sekinin barai logic
     let pao = false;
@@ -243,7 +243,7 @@ function parsehule(h, kyoku, isHeadBump) {
         RUNES.points[JPNAME] + (h.zimo && h.qinjia ? RUNES.all[NAMEPREF] : "");
 
     //score string
-    let fuhan = h.fu + RUNES.fu[NAMEPREF] + h.count + RUNES.han[NAMEPREF];
+    const fuhan = h.fu + RUNES.fu[NAMEPREF] + h.count + RUNES.han[NAMEPREF];
     if (h.yiman)
         //yakuman
         res.push((SHOWFU ? fuhan : "") + RUNES.yakuman[NAMEPREF] + points);
@@ -292,7 +292,8 @@ function parsehule(h, kyoku, isHeadBump) {
 }
 
 //round information, to be reset every RecordNewRound
-let kyoku = [];
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const kyoku: any = [];
 kyoku.init = function (leaf) {
     //[kyoku, honba, riichi sticks] - NOTE: 4 mult. works for sanma
     this.nplayers = leaf.scores.length;
@@ -327,7 +328,7 @@ kyoku.init = function (leaf) {
 //dump round informaion
 kyoku.dump = function (uras) {
     //NOTE: doras,uras are the indicators
-    let entry = [];
+    const entry: unknown[] = [];
     entry.push(kyoku.round);
     entry.push(kyoku.initscores);
     entry.push(kyoku.doras);
@@ -364,10 +365,12 @@ function relativeseating(seat0, seat1) {
 }
 
 //convert mjs records to tenhou log
-function generatelog(mjslog) {
-    let log = [];
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function generatelog(mjslog: any[]) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const log: any[] = [];
     mjslog.forEach((e, leafidx) => {
-        switch (e.constructor.name) {
+        switch (e?.constructor.name) {
             case "RecordNewRound": {
                 //new round
                 kyoku.init(e);
@@ -375,7 +378,8 @@ function generatelog(mjslog) {
             }
             case "RecordDiscardTile": {
                 //discard - marking tsumogiri and riichi
-                let symbol = e.moqie ? TSUMOGIRI : tm2t(e.tile);
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                let symbol: any = e.moqie ? TSUMOGIRI : tm2t(e.tile);
 
                 //we pretend that the dealer's initial 14th tile is drawn - so we need to manually check the first discard
                 if (
@@ -434,8 +438,8 @@ function generatelog(mjslog) {
                     }
                     case 1: {
                         //pon
-                        let worktiles = e.tiles.map((f) => tm2t(f));
-                        let idx = relativeseating(e.seat, kyoku.ldseat);
+                        const worktiles = e.tiles.map((f) => tm2t(f));
+                        const idx = relativeseating(e.seat, kyoku.ldseat);
                         kyoku.countpao(worktiles[0], e.seat, kyoku.ldseat);
                         //pop the called tile a preprend 'p'
                         worktiles.splice(idx, 0, "p" + worktiles.pop());
@@ -461,9 +465,9 @@ function generatelog(mjslog) {
                         //     (writes to discards)
                         ///////////////////////////////////////////////////
                         //daiminkan
-                        let calltiles = e.tiles.map((f) => tm2t(f));
+                        const calltiles = e.tiles.map((f) => tm2t(f));
                         // < kamicha 0 | toimen 1 | shimocha 3 >
-                        let idx = relativeseating(e.seat, kyoku.ldseat);
+                        const idx = relativeseating(e.seat, kyoku.ldseat);
 
                         kyoku.countpao(calltiles[0], e.seat, kyoku.ldseat);
                         calltiles.splice(
@@ -507,7 +511,7 @@ function generatelog(mjslog) {
                         //get the tiles from haipai and draws that
                         //are involved in ankan, dumb
                         //because n aka might be involved
-                        let ankantiles = kyoku.haipais[e.seat]
+                        const ankantiles = kyoku.haipais[e.seat]
                             .filter((t) =>
                                 deaka(t) == deaka(til) ? true : false,
                             )
@@ -527,7 +531,7 @@ function generatelog(mjslog) {
                     case 2: {
                         //shouminkan
                         //get pon naki from .draws and swap in new symbol
-                        let nakis = kyoku.draws[e.seat].filter((w) => {
+                        const nakis = kyoku.draws[e.seat].filter((w) => {
                             if ("string" === typeof w)
                                 //naki
                                 return (
@@ -580,7 +584,7 @@ function generatelog(mjslog) {
                     kyoku.nriichi++;
                 }
 
-                var entry = kyoku.dump([]);
+                const entry = kyoku.dump([]);
 
                 if (1 == e.type)
                     entry.push([RUNES.kyuushukyuuhai[NAMEPREF]]); //kyuushukyuhai
@@ -600,8 +604,8 @@ function generatelog(mjslog) {
             }
             case "RecordNoTile": {
                 //ryuukyoku
-                let entry = kyoku.dump([]);
-                let delta = new Array(4).fill(0);
+                const entry = kyoku.dump([]);
+                const delta = new Array(4).fill(0);
 
                 //NOTE: mjs wll not give delta_scores if everyone is (no)ten - TODO: minimize the autism
                 if (
@@ -625,7 +629,8 @@ function generatelog(mjslog) {
             }
             case "RecordHule": {
                 //agari
-                let agari = [];
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                const agari: any[] = [];
                 let ura = [];
                 let isHeadBump = true;
                 e.hules.forEach((f) => {
@@ -635,7 +640,7 @@ function generatelog(mjslog) {
                     agari.push(parsehule(f, kyoku, isHeadBump));
                     isHeadBump = false;
                 });
-                let entry = kyoku.dump(ura);
+                const entry = kyoku.dump(ura);
 
                 entry.push([RUNES.agari[JPNAME]].concat(agari.flat())); //needs the japanese agari
                 log.push(entry);
@@ -658,14 +663,77 @@ function generatelog(mjslog) {
     return log;
 }
 
+interface MajSoulLog {
+    head: {
+        uuid: string;
+        start_time: number;
+        end_time: number;
+        config: {
+            category: number;
+            mode: {
+                mode: number;
+                detail_rule: {
+                    dora_count?: number;
+                    have_zimosun?: boolean;
+                };
+            };
+            meta: {
+                room_id?: number;
+                mode_id?: number;
+                contest_uid?: number;
+            };
+        };
+        accounts: {
+            account_id: number;
+            seat: number;
+            nickname: string;
+            character: {
+                charid: number;
+                level: number;
+                exp: number;
+                skin: number;
+                is_upgraded: boolean;
+            };
+            title: number;
+            level: {
+                id: number;
+                score: number;
+            };
+            level3: {
+                id: number;
+                score: number;
+            };
+            avatar_frame: number;
+            verified: number;
+            views: {
+                slot: number;
+                item_id: NodeModule;
+            }[];
+        }[];
+        result: {
+            players: {
+                seat: number;
+                total_point: number;
+                part_point_1: number;
+                part_point_2: number;
+                grading_score: number;
+                gold: number;
+            }[];
+        };
+    };
+    data: unknown[];
+    data_url: string;
+}
+
 //this is the json struct that we write to file
-function parse(record) {
-    let res = {};
+function parse(record: MajSoulLog) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const res: any = {};
     let ruledisp = "";
     let lobby = ""; //usually 0, is the custom lobby number
-    let nplayers = record.head.result.players.length;
-    let nakas = nplayers - 1; //default
-    let mjslog = record.data;
+    const nplayers = record.head.result.players.length;
+    let nakas: number | undefined = nplayers - 1; //default
+    const mjslog = record.data;
 
     res["ver"] = "2.3"; // mlog version number
     res["ref"] = record.head.uuid; // game id - copy and paste into "other" on the log page to view
@@ -750,13 +818,13 @@ function parse(record) {
         res["sx"][3] = "";
     }
     // scores
-    let scores = record.head.result.players.map((e) => [
+    const scores = record.head.result.players.map((e) => [
         e.seat,
         e.part_point_1,
         e.total_point / 1000,
     ]);
     res["sc"] = new Array(8).fill(0);
-    scores.forEach((e, i) => {
+    scores.forEach((e) => {
         res["sc"][2 * e[0]] = e[1];
         res["sc"][2 * e[0] + 1] = e[2];
     });
@@ -769,7 +837,7 @@ function parse(record) {
     if (VERBOSELOG) {
         res["mjshead"] = record.head;
         res["mjslog"] = mjslog;
-        res["mjsrecordtypes"] = mjslog.map((e) => e.constructor.name);
+        res["mjsrecordtypes"] = mjslog.map((e) => e?.constructor.name);
     }
 
     return res;

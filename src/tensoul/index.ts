@@ -1,11 +1,11 @@
 "use strict";
 
-import pb from "protobufjs";
+// import pb from "protobufjs";
 import MJSoul from "mjsoul";
 import superagent from "superagent";
 import superagentProxy from "superagent-proxy";
 superagentProxy(superagent);
-import { ProxyAgent } from "proxy-agent";
+import { HttpsProxyAgent } from "https-proxy-agent";
 
 import { toTenhou } from "./convert.js";
 import * as deobfuse from "./deobfuse.js";
@@ -16,6 +16,11 @@ import process from "process";
 import EventEmitter from "events";
 
 class Client {
+    _condvar;
+    _is_logged_in;
+    _serverVersion;
+    _clientVersionString;
+    _mjsoul;
     constructor() {}
 
     async init() {
@@ -29,8 +34,8 @@ class Client {
         this._clientVersionString =
             "web-" + this._serverVersion.replace(/\.w$/, "");
 
-        const root = pb.Root.fromJSON(scfg.liqi);
-        const wrapper = root.lookupType("Wrapper");
+        // const root = pb.Root.fromJSON(scfg.liqi);
+        // const wrapper = root.lookupType("Wrapper");
 
         let gateway = config.mjsoul.gateway;
         if (gateway == null) {
@@ -44,11 +49,13 @@ class Client {
         this._mjsoul = new MJSoul({
             url: gateway,
             timeout: config.mjsoul.timeout,
-            root,
-            wrapper,
+            // root,
+            // wrapper,
             wsOption: {
-                agent: new ProxyAgent(process.env.https_proxy),
-                origin: config.mjsoul.base,
+                agent: process.env.https_proxy
+                    ? new HttpsProxyAgent(process.env.https_proxy)
+                    : undefined,
+                // origin: config.mjsoul.base,
                 headers: {
                     "User-Agent": config.userAgent,
                 },
@@ -70,11 +77,13 @@ class Client {
                     this._mjsoul = new MJSoul({
                         url: gateway,
                         timeout: config.mjsoul.timeout,
-                        root,
-                        wrapper,
+                        // root,
+                        // wrapper,
                         wsOption: {
-                            agent: new ProxyAgent(process.env.https_proxy),
-                            origin: config.mjsoul.base,
+                            agent: process.env.https_proxy
+                                ? new HttpsProxyAgent(process.env.https_proxy)
+                                : undefined,
+                            // origin: config.mjsoul.base,
                             headers: {
                                 "User-Agent": config.userAgent,
                             },
@@ -118,7 +127,7 @@ class Client {
     async tenhouLogFromMjsoulID(id) {
         const seps = id.split("_");
         let logID = seps[0];
-        let targetID;
+        let targetID: number | null = null;
 
         if (seps.length >= 3 && seps[2] === "2") {
             // "anonymized" log id
@@ -150,7 +159,7 @@ class Client {
             log.data = (
                 await superagent
                     .get(log.data_url)
-                    .proxy(process.env.https_proxy)
+                    .proxy(process.env.https_proxy || "")
                     .buffer(true)
             ).body;
         }
@@ -179,7 +188,7 @@ class Client {
         const tenhouLog = toTenhou(log);
 
         if (targetID != null) {
-            for (let acc of log.head.accounts) {
+            for (const acc of log.head.accounts) {
                 if (acc.account_id === targetID) {
                     tenhouLog._target_actor = acc.seat;
                     break;
