@@ -2,6 +2,10 @@ import { Data, Layout } from "plotly.js";
 import { PlayerDataLoader } from "./amae-koromo/source/loader.js";
 import { GameMode, GameRecord } from "./amae-koromo/types/index.js";
 
+interface Review {
+    rating: number;
+    concordance: number;
+}
 const reviewCompatibleModes = [16, 12, 9] as GameMode[];
 
 const loadLogIds = async (id: string, limit = 100) => {
@@ -29,34 +33,37 @@ const loadLogIds = async (id: string, limit = 100) => {
     );
 };
 
-const buildHTML = (ratings: number[], id: string) => {
+const buildHTML = (reviews: Review[], id: string) => {
     const head = `<head><script src="https://cdn.plot.ly/plotly-2.32.0.min.js" charset="utf-8"></script></head>`;
-    const div = `<div id="tester" style="width:600px;height:250px;"></div>`;
-    const data: Data[] = [
-        {
-            x: Array.from({ length: ratings.length }, (_, i) => i),
-            y: ratings.map((rating) => rating * 100),
-            mode: "lines",
-            type: "scatter",
-        },
-    ];
+    const div = `<div id="plot" style="width:600px;height:250px;"></div>`;
+    const trace_rating: Data = {
+        x: Array.from({ length: reviews.length }, (_, i) => i),
+        y: reviews.map((r) => r.rating),
+        mode: "lines+markers",
+        type: "scatter",
+        name: "Rating",
+    };
+    const trace_concordance: Data = {
+        x: Array.from({ length: reviews.length }, (_, i) => i),
+        y: reviews.map((r) => r.concordance),
+        mode: "lines+markers",
+        type: "scatter",
+        name: "Concordance",
+    };
+    const data: Data[] = [trace_rating, trace_concordance];
     const layout: Partial<Layout> = {
-        title: `Ratings of ${id} (last ${ratings.length} games)`,
+        title: `Reviews of ${id} (last ${reviews.length} games)`,
         xaxis: {
-            title: "Game",
             showgrid: false,
-            zeroline: false,
-        },
-        yaxis: {
-            title: "Rating",
-            showline: false,
+            showspikes: true,
+            showticklabels: false,
         },
     };
     const script = `<script>
-	TESTER = document.getElementById('tester');
-	Plotly.newPlot( TESTER, ${JSON.stringify(data)}, ${JSON.stringify(layout)} );
+	var PLOT = document.getElementById('plot');
+	Plotly.newPlot( PLOT, ${JSON.stringify(data)}, ${JSON.stringify(layout)} );
 </script>`;
     return `<!DOCTYPE html><html>${head}<body>${div}${script}</body></html>`;
 };
 
-export { loadLogIds, buildHTML };
+export { loadLogIds, buildHTML, type Review };

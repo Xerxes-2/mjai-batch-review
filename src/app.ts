@@ -1,4 +1,4 @@
-import { loadLogIds, buildHTML } from "./utils.js";
+import { loadLogIds, buildHTML, Review } from "./utils.js";
 import { Client } from "./tensoul/index.js";
 import { promises as fs } from "fs";
 import config from "./config.js";
@@ -33,7 +33,8 @@ const logsPath = await fs.realpath("./logs");
 console.log("Initializing client");
 const client = new Client();
 await client.init();
-const ratings: number[] = [];
+
+const ratings: Review[] = [];
 for (const [i, logId] of logIds.entries()) {
     console.log(`Processing log ${i + 1}/${logIds.length}`);
     const log = await client.tenhouLogFromMjsoulID(logId);
@@ -59,9 +60,13 @@ for (const [i, logId] of logIds.entries()) {
             cwd: logsPath,
         },
     );
-    const rating = JSON.parse(stdout).review.rating as number;
-    console.log(`Rating: ${rating}`);
-    ratings.push(rating);
+    const json = JSON.parse(stdout);
+    const rating = (json.review.rating * 100) as number;
+    const concordance = ((json.review.total_matches /
+        json.review.total_reviewed) *
+        100) as number;
+    console.log(`Rating: ${rating}, Concordance: ${concordance}%`);
+    ratings.push({ rating, concordance });
 }
 
 ratings.reverse();
