@@ -16,7 +16,8 @@ const loadLogIds = async (id: string, limit = 100) => {
         reviewCompatibleModes,
     );
     // this errors when input is invalid to ensure getNextChunk doesn't hang
-    await loader.getMetadata();
+    const meta = await loader.getMetadata();
+    const nickname = meta.nickname;
     let records: GameRecord[] = [];
     let chunk: GameRecord[] = await loader.getNextChunk();
     // but getNextChunk doesn't, it just hangs
@@ -28,17 +29,21 @@ const loadLogIds = async (id: string, limit = 100) => {
     // trim to limit
     records = records.slice(0, limit);
 
-    return records.map((record) =>
-        GameRecord.getRecordLink(record, id).split("=").pop(),
-    );
+    return {
+        nickname,
+        records: records.map((record) =>
+            GameRecord.getRecordLink(record, id).split("=").pop(),
+        ),
+    };
 };
 
-const buildHTML = (reviews: Review[], id: string) => {
+const buildHTML = (reviews: Review[], id: string, name: string) => {
     const head = `<head><script src="https://cdn.plot.ly/plotly-2.32.0.min.js" charset="utf-8"></script></head>`;
     const div = `<div id="plot" style="width:600px;height:250px;"></div>`;
     const trace_rating: Data = {
         x: Array.from({ length: reviews.length }, (_, i) => i),
         y: reviews.map((r) => r.rating),
+        hoverinfo: "y",
         mode: "lines+markers",
         type: "scatter",
         name: "Rating",
@@ -46,13 +51,14 @@ const buildHTML = (reviews: Review[], id: string) => {
     const trace_concordance: Data = {
         x: Array.from({ length: reviews.length }, (_, i) => i),
         y: reviews.map((r) => r.concordance),
+        hoverinfo: "y",
         mode: "lines+markers",
         type: "scatter",
         name: "Concordance",
     };
     const data: Data[] = [trace_rating, trace_concordance];
     const layout: Partial<Layout> = {
-        title: `Reviews of ${id} (last ${reviews.length} games)`,
+        title: `Reviews of ${name}(id: ${id}) (last ${reviews.length} games)`,
         xaxis: {
             showgrid: false,
             showspikes: true,

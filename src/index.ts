@@ -35,8 +35,9 @@ const client = new Client();
 await client.init();
 
 const ratings: Review[] = [];
-for (const [i, logId] of logIds.entries()) {
-    console.log(`Processing log ${i + 1}/${logIds.length}`);
+const nickname = logIds.nickname;
+for (const [i, logId] of logIds.records.entries()) {
+    console.log(`Processing log ${i + 1}/${logIds.records.length}`);
     const log = await client.tenhouLogFromMjsoulID(logId);
     await fs.writeFile(`./logs/${logId}.json`, JSON.stringify(log, null, 4));
     // mjai-reviewer --mortal-exe=mortal --mortal-cfg=config.toml  -e mortal -i=x.json -a 1 --show-rating --json --out-file=- 2>/dev/null | jq '.["review"].["rating"]'
@@ -68,7 +69,7 @@ for (const [i, logId] of logIds.entries()) {
 
 ratings.reverse();
 
-const html = buildHTML(ratings, accountId);
+const html = buildHTML(ratings, accountId, nickname);
 console.log("Writing ratings.html");
 await fs.rm("./ratings.html", { force: true });
 await fs.writeFile("./ratings.html", html);
