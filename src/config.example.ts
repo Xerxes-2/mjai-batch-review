@@ -3,6 +3,7 @@ const config = {
     httpBase: "https://mahjongsoul.game.yo-star.com",
     // URL of the websocket gateway
     wsGateway: "wss://mjusgs.mahjongsoul.com:9663/",
+
     // Store your access token here
     // get it by logging into your temporary account and running the following command in the browser console:
     // GameMgr.Inst.access_token

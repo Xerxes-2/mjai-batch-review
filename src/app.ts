@@ -38,8 +38,7 @@ for (const [i, logId] of logIds.entries()) {
     console.log(`Processing log ${i + 1}/${logIds.length}`);
     const log = await client.tenhouLogFromMjsoulID(logId);
     await fs.writeFile(`./logs/${logId}.json`, JSON.stringify(log, null, 4));
-    // mjai-reviewer --mortal-exe=mortal --mortal-cfg=config.toml  -e mortal -i=x.json -a 1 --show-rating --json --out-file=/dev/stdout 2>/dev/null | jq '.["review"].["rating"]'
-    // start mjai-reviewer
+    // mjai-reviewer --mortal-exe=mortal --mortal-cfg=config.toml  -e mortal -i=x.json -a 1 --show-rating --json --out-file=- 2>/dev/null | jq '.["review"].["rating"]'
     console.log("Download complete, running mjai-reviewer");
     const { stdout } = await execFileAsync(
         config.mjaiReviewer,
