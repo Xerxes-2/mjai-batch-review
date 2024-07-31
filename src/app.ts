@@ -54,7 +54,7 @@ for (const [i, logId] of logIds.entries()) {
             "1",
             "--show-rating",
             "--json",
-            "--out-file=/dev/stdout",
+            "--out-file=-",
         ],
         {
             cwd: logsPath,
