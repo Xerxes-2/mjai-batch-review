@@ -2,16 +2,14 @@ import { loadLogIds, buildHTML, Review } from "./utils.js";
 import { Client } from "./tensoul/index.js";
 import { promises as fs } from "fs";
 import config from "./config.js";
-import { exit } from "process";
 import { execFile } from "child_process";
 import util from "util";
-import process from "process";
 
 const execFileAsync = util.promisify(execFile);
 
 if (process.argv.length === 2) {
     console.error(
-        `Usage: ${process.argv[0]} ${process.argv[1]} <account-id> [limit]`,
+        `Usage: npm start <account-id> [limit]`,
     );
     process.exit(1);
 }
@@ -40,7 +38,7 @@ for (const [i, logId] of logIds.records.entries()) {
     console.log(`Processing log ${i + 1}/${logIds.records.length}`);
     const log = await client.tenhouLogFromMjsoulID(logId);
     await fs.writeFile(`./logs/${logId}.json`, JSON.stringify(log, null, 4));
-    // mjai-reviewer --mortal-exe=mortal --mortal-cfg=config.toml  -e mortal -i=x.json -a 1 --show-rating --json --out-file=- 2>/dev/null | jq '.["review"].["rating"]'
+    // mjai-reviewer --mortal-exe=mortal --mortal-cfg=config.toml  -e mortal -i=x.json --show-rating --json --out-file=- 2>/dev/null | jq '.["review"].["rating"]'
     console.log("Download complete, running mjai-reviewer");
     const { stdout } = await execFileAsync(
         config.mjaiReviewer,
@@ -49,7 +47,7 @@ for (const [i, logId] of logIds.records.entries()) {
             `--mortal-cfg=${config.mortalCfg}`,
             "-e=mortal",
             `-i=./${logId}.json`,
-            "-a=1",
+            `-n=${nickname}`,
             "--show-rating",
             "--json",
             "--out-file=-",
@@ -59,10 +57,9 @@ for (const [i, logId] of logIds.records.entries()) {
         },
     );
     const json = JSON.parse(stdout);
-    const rating = (json.review.rating * 100) as number;
-    const concordance = ((json.review.total_matches /
-        json.review.total_reviewed) *
-        100) as number;
+    const rating = json.review.rating * 100;
+    const concordance =
+        (json.review.total_matches / json.review.total_reviewed) * 100;
     console.log(`Rating: ${rating}, Concordance: ${concordance}%`);
     ratings.push({ rating, concordance });
 }
@@ -77,4 +74,4 @@ await fs.writeFile("./ratings.html", html);
 const open = (await import("open")).default;
 await open("./ratings.html");
 
-exit(0);
+process.exit(0);
