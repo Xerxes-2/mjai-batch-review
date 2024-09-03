@@ -48,7 +48,12 @@ const loadLogIds = async (id: string, limit = 100) => {
         nickname,
         records: records
             .map((record) => new Record(record, id))
-            .filter((record) => record.logLink !== "" && record.logId !== "" && record.index !== -1),
+            .filter(
+                (record) =>
+                    record.logLink !== "" &&
+                    record.logId !== "" &&
+                    record.index !== -1,
+            ),
     };
 };
 
