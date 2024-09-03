@@ -9,7 +9,7 @@ A simple script to review one's recent MajSoul logs using Mortal, and to generat
 - **Mortal**: refers to [Mortal's Document](https://mortal.ekyu.moe/user/build.html)
 - **mjai-reviewer**: refers to [mjai-reviewer's Document](https://github.com/Equim-chan/mjai-reviewer)
   - You also need a trained model file to actually use Mortal.
-- **[Node.js](https://nodejs.org/)**
+- **[Node.js](https://nodejs.org/)**(LTS version is recommended)
 
 You need to ensure you can run `mjai-reviewer` with `mortal` model successfully.
 
