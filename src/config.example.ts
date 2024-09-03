@@ -9,8 +9,8 @@ const config = {
     paipuBase: BASES.CN,
     // Base URL used by dump client, EN server recommended
     httpBase: BASES.EN,
-    // URL of the websocket gateway used by dump client, must be the same server as httpBase
-    // You can check it using browser devtools, in the WS tab
+    // URL of the websocket gateway used by dump client, better be the same server as httpBase
+    // You can check it using browser devtools, in the Network -> WS tab
     wsGateway: "wss://mjusgs.mahjongsoul.com:9663/",
 
     // Store your access token here

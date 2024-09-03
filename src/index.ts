@@ -17,6 +17,8 @@ const limit = process.argv[3] ? parseInt(process.argv[3]) : 100;
 
 console.log(`Loading log ids for ${accountId}`);
 const logIds = await loadLogIds(accountId, limit);
+console.log(`Nickname: ${logIds.nickname}`);
+console.log(`Loaded ${logIds.records.length} log ids`);
 
 // clear logs
 console.log("Clearing logs directory");
