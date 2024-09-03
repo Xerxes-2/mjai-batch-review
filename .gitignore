@@ -66,4 +66,4 @@ package-lock.json
 /lib/
 logs
 src/config.ts
-ratings.html
+ratings*.html

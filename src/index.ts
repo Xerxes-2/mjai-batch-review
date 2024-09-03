@@ -70,11 +70,11 @@ for (const [i, rec] of logIds.records.entries()) {
 ratings.reverse();
 
 const html = buildHTML(ratings, accountId, nickname);
-console.log("Writing ratings.html");
-await fs.rm("./ratings.html", { force: true });
-await fs.writeFile("./ratings.html", html);
+console.log(`Writing ratings-${accountId}.html`);
+await fs.rm(`./ratings-${accountId}.html`, { force: true });
+await fs.writeFile(`./ratings-${accountId}.html`, html);
 
 const open = (await import("open")).default;
-await open("./ratings.html");
+await open(`./ratings-${accountId}.html`);
 
 process.exit(0);
