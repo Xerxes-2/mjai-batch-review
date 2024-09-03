@@ -8,9 +8,7 @@ import util from "util";
 const execFileAsync = util.promisify(execFile);
 
 if (process.argv.length === 2) {
-    console.error(
-        `Usage: npm start <account-id> [limit]`,
-    );
+    console.error(`Usage: npm start <account-id> [limit]`);
     process.exit(1);
 }
 
@@ -36,18 +34,19 @@ const ratings: Review[] = [];
 const nickname = logIds.nickname;
 for (const [i, rec] of logIds.records.entries()) {
     console.log(`Processing log ${i + 1}/${logIds.records.length}`);
-    const log = await client.tenhouLogFromMjsoulID(rec.logId);
-    await fs.writeFile(`./logs/${rec.logId}.json`, JSON.stringify(log, null, 4));
+    console.log(`\tDownloading log ${rec.logLink}`);
+    const log = await client.tenhouLogFromMjsoulID(rec.logLink);
+    await fs.writeFile(`./logs/${rec.logLink}.json`, JSON.stringify(log, null, 4));
     // mjai-reviewer --mortal-exe=mortal --mortal-cfg=config.toml  -e mortal -i=x.json --show-rating --json --out-file=- 2>/dev/null | jq '.["review"].["rating"]'
-    console.log("Download complete, running mjai-reviewer");
+    console.log("\tDownload complete, running mjai-reviewer");
     const { stdout } = await execFileAsync(
         config.mjaiReviewer,
         [
             `--mortal-exe=${config.mortal}`,
             `--mortal-cfg=${config.mortalCfg}`,
             "-e=mortal",
-            `-i=./${rec.logId}.json`,
-            `-a=${rec.playerIndex}`,
+            `-i=./${rec.logLink}.json`,
+            `-a=${rec.index}`,
             "--show-rating",
             "--json",
             "--out-file=-",
@@ -60,8 +59,12 @@ for (const [i, rec] of logIds.records.entries()) {
     const rating = json.review.rating * 100;
     const concordance =
         (json.review.total_matches / json.review.total_reviewed) * 100;
-    console.log(`Rating: ${rating}, Concordance: ${concordance}%`);
-    ratings.push({ rating, concordance });
+    console.log(`\tRating: ${rating}, Concordance: ${concordance}%`);
+    ratings.push({
+        log: rec.logLink,
+        rating,
+        concordance,
+    });
 }
 
 ratings.reverse();

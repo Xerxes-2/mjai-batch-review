@@ -1,7 +1,16 @@
+const BASES = {
+    CN: "https://game.maj-soul.com/1",
+    EN: "https://mahjongsoul.game.yo-star.com",
+    JP: "https://game.mahjongsoul.com",
+};
+
 const config = {
-    // Base URL of the game
-    httpBase: "https://mahjongsoul.game.yo-star.com",
-    // URL of the websocket gateway
+    // Base URL of generated paipu, use whatever server you want
+    paipuBase: BASES.CN,
+    // Base URL used by dump client, EN server recommended
+    httpBase: BASES.EN,
+    // URL of the websocket gateway used by dump client, must be the same server as httpBase
+    // You can check it using browser devtools, in the WS tab
     wsGateway: "wss://mjusgs.mahjongsoul.com:9663/",
 
     // Store your access token here
@@ -37,6 +46,7 @@ if (!config.mortalCfg) {
 }
 
 // trim tailing slash of httpBase before exporting
+config.paipuBase = config.paipuBase.replace(/\/$/, "");
 config.httpBase = config.httpBase.replace(/\/$/, "");
 
 export default config;
