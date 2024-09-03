@@ -4,6 +4,8 @@
 
 A simple script to review one's recent MajSoul logs using Mortal, and to generate a report of the results.
 
+![Example](https://raw.githubusercontent.com/Xerxes-2/mjai-batch-review/master/images/example.png)
+
 ## Requirements
 
 - **Mortal**: refers to [Mortal's Document](https://mortal.ekyu.moe/user/build.html)
