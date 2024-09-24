@@ -11,13 +11,11 @@ interface Review {
 
 class Record {
     logLink: string;
-    logId: string;
     index: number;
 
     constructor(rec: GameRecord, id: string) {
         const link = GameRecord.getRecordLink(rec, id);
-        this.logLink = link?.split("=").pop() ?? "";
-        this.logId = rec.uuid;
+        this.logLink = link.split("=").pop() ?? "";
         this.index = GameRecord.getRankIndexByPlayer(rec, id);
     }
 }
@@ -51,7 +49,6 @@ const loadLogIds = async (id: string, limit = 100) => {
             .filter(
                 (record) =>
                     record.logLink !== "" &&
-                    record.logId !== "" &&
                     record.index !== -1,
             ),
     };
