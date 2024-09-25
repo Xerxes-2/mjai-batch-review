@@ -34,6 +34,6 @@
         "proxy-agent": "^6.4.0",
         "superagent": "^10.1.0",
         "superagent-proxy": "^3.0.0",
-        "tensoul": "github:Xerxes-2/tensoul"
+        "tensoul": "github:Equim-chan/tensoul"
     }
 }
