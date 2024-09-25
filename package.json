@@ -9,8 +9,7 @@
         "start": "npm run build && node built/index.js",
         "lint": "npx oxlint@latest",
         "format": "prettier --write src/*",
-        "test": "echo \"Error: no test specified\" && exit 1",
-        "postinstall": "patch-package"
+        "test": "echo \"Error: no test specified\" && exit 1"
     },
     "keywords": [],
     "author": "Xerxes-2",
@@ -31,11 +30,10 @@
         "dayjs": "^1.11.13",
         "mjsoul": "^2.3.0",
         "open": "^10.1.0",
-        "patch-package": "^8.0.0",
         "protobufjs": "^7.4.0",
         "proxy-agent": "^6.4.0",
         "superagent": "^10.1.0",
         "superagent-proxy": "^3.0.0",
-        "tensoul": "github:Equim-chan/tensoul"
+        "tensoul": "github:Xerxes-2/tensoul"
     }
 }

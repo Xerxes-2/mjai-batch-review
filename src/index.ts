@@ -1,5 +1,6 @@
 import { loadLogIds, buildHTML, Review } from "./utils.js";
-import { Client } from "./tensoul/index.js";
+import tensoulConfig from "tensoul/config.example.js";
+import Client from "tensoul/client.js";
 import { promises as fs } from "fs";
 import config from "./config.js";
 import { execFile } from "child_process";
@@ -29,7 +30,8 @@ await fs.mkdir("./logs", { recursive: true });
 const logsPath = await fs.realpath("./logs");
 
 console.log("Initializing client");
-const client = new Client();
+
+const client = new Client(tensoulConfig);
 await client.init();
 
 const ratings: Review[] = [];
