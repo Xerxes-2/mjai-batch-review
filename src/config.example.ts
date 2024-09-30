@@ -49,4 +49,8 @@ if (!config.mortalCfg) {
 config.paipuBase = config.paipuBase.replace(/\/$/, "");
 config.httpBase = config.httpBase.replace(/\/$/, "");
 
+process.env.MJS_BASE = config.httpBase;
+process.env.MJS_GATEWAY = config.wsGateway;
+process.env.ACCESS_TOKEN = config.accessToken;
+
 export default config;
