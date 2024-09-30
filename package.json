@@ -17,23 +17,15 @@
     "description": "Dump, review and analyse one's MajSoul logs at one command",
     "repository": "github:Xerxes-2/mjai-batch-review",
     "devDependencies": {
-        "@eslint/js": "^9.9.1",
         "@types/node": "^22.5.2",
         "@types/plotly.js": "^2.33.1",
-        "@types/superagent": "^8.1.9",
-        "@types/superagent-proxy": "^3.0.4",
         "globals": "^15.9.0",
         "prettier": "^3.3.3",
         "typescript": "^5.5.3"
     },
     "dependencies": {
         "dayjs": "^1.11.13",
-        "mjsoul": "^2.3.0",
         "open": "^10.1.0",
-        "protobufjs": "^7.4.0",
-        "proxy-agent": "^6.4.0",
-        "superagent": "^10.1.0",
-        "superagent-proxy": "^3.0.0",
         "tensoul": "github:Equim-chan/tensoul"
     }
 }
