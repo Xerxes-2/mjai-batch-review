@@ -11,7 +11,7 @@ const config = {
     httpBase: BASES.EN,
     // URL of the websocket gateway used by dump client, better be the same server as httpBase
     // You can check it using browser devtools, in the Network -> WS tab
-    wsGateway: "wss://mjusgs.mahjongsoul.com:9663/",
+    wsGateway: "wss://engame.mahjongsoul.com/gateway",
 
     // Store your access token here
     // get it by logging into your temporary account and running the following command in the browser console:
