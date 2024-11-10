@@ -13,6 +13,12 @@ const config = {
     // You can check it using browser devtools, in the Network -> WS tab
     wsGateway: "wss://engame.mahjongsoul.com/gateway",
 
+    // Modes to be reviewed, eg. 4p south: [16, 12, 9], 3p east & south: [26, 25, 24, 23, 22, 21]
+    reviewModes: [16, 12, 9],
+
+    // Base Configuration of amae-koromo, "DEFAULT" for 4p, "ikeda" for 3p
+    apiBase: "DEFAULT",
+
     // Store your access token here
     // get it by logging into your temporary account and running the following command in the browser console:
     // GameMgr.Inst.access_token

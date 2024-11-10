@@ -1,5 +1,6 @@
 import { GameMode } from "../types/index.js";
 import dayjs from "dayjs";
+import config from "../../config.js";
 
 export const CONFIGURATIONS = {
     DEFAULT: {
@@ -166,7 +167,7 @@ function mergeDeep<T extends { [key: string]: any }>(
 }
 
 const ConfBase: Partial<Configuration> = (() => {
-    return CONFIGURATIONS.DEFAULT;
+    return CONFIGURATIONS[config.apiBase];
 })();
 
 const Conf = mergeDeep<Configuration>(CONFIGURATIONS.DEFAULT, ConfBase);

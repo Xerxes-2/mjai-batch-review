@@ -19,7 +19,7 @@ class Record {
         this.index = GameRecord.getRankIndexByPlayer(rec, id);
     }
 }
-const reviewCompatibleModes = [16, 12, 9] as GameMode[];
+const reviewCompatibleModes = config.reviewModes as GameMode[];
 
 const loadLogIds = async (id: string, limit = 100) => {
     const loader = new PlayerDataLoader(
